@@ -1,0 +1,31 @@
+{
+  "model_type": "RandomForestClassifier",
+  "feature_names": [
+    "age",
+    "job",
+    "marital",
+    "education",
+    "default_credit",
+    "balance",
+    "housing",
+    "loan",
+    "contact",
+    "day",
+    "month",
+    "day_of_week",
+    "duration",
+    "campaign",
+    "pdays",
+    "previous",
+    "poutcome",
+    "emp_var_rate",
+    "cons_price_idx",
+    "cons_conf_idx",
+    "euribor3m",
+    "nr_employed"
+  ],
+  "training_date": "2026-01-08T14:25:41.915337",
+  "n_features": 22,
+  "n_estimators": 100,
+  "max_depth": 10
+}

@@ -1,0 +1,43 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(test:*)",
+      "Bash(python scripts/download_jdbc_driver.py:*)",
+      "Bash(python3:*)",
+      "Bash(where:*)",
+      "Bash(curl:*)",
+      "Bash(.venv/Scripts/python.exe:*)",
+      "Bash(.venv/Scripts/pip.exe:*)",
+      "Bash(python:*)",
+      "Bash(git clone:*)",
+      "Bash(../.venv/Scripts/python.exe:*)",
+      "Bash(G:/PycharmProjects/BankAgent-Pro/.venv/Scripts/python.exe:*)",
+      "Bash(find:*)",
+      "Bash(../.venv/Scripts/pip.exe install langgraph-checkpoint)",
+      "Bash(../.venv/Scripts/pip.exe show:*)",
+      "Bash(G:/PycharmProjects/BankAgent-Pro/.venv/Scripts/pip.exe show:*)",
+      "Bash(G:/PycharmProjects/BankAgent-Pro/.venv/Scripts/pip.exe search langgraph-checkpoint)",
+      "Bash(G:/PycharmProjects/BankAgent-Pro/.venv/Scripts/pip.exe install:*)",
+      "Bash(git checkout:*)",
+      "Bash(rm:*)",
+      "Bash(py:*)",
+      "Bash(netstat:*)",
+      "Bash(findstr \":8001\")",
+      "Bash(taskkill:*)",
+      "mcp__zai-mcp-server__analyze_image",
+      "Bash(cd:*)",
+      "Read(//d G:/PycharmProjects/BankAgent-Pro/**)",
+      "Bash(npm list)",
+      "Bash(node:*)",
+      "Bash(npm list:*)",
+      "Bash(grep:*)",
+      "Bash(\"G:\\\\PycharmProjects\\\\BankAgent-Pro\\\\CLAUDE.md\":*)",
+      "mcp__zread__read_file",
+      "Bash(pandoc:*)",
+      "Bash(\"/c/Program Files/Python312/python.exe\":*)",
+      "Bash(\"./.venv/Scripts/python.exe\":*)",
+      "Bash(\"./.venv/Scripts/pip.exe\" install:*)",
+      "Bash(ls:*)"
+    ]
+  }
+}

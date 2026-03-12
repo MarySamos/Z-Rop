@@ -1,0 +1,271 @@
+/* =========================================================================
+   BankAgent Pro - 全局样式
+   现代极简风格 - 玻璃质感 + 圆润设计
+   ========================================================================= */
+
+/* =========================================================================
+   CSS 变量定义
+   ========================================================================= */
+:root {
+  /* 主色调 - 浅粉色系（代替蓝色/紫色） */
+  --color-primary: #ff6b81;
+  --color-primary-light: #ff8fa3;
+  --color-primary-dark: #e8556e;
+
+  /* 辅助色 */
+  --color-success: #52c41a;
+  --color-warning: #faad14;
+  --color-danger: #ff4d4f;
+  --color-info: #909399;
+
+  /* 中性色 */
+  --color-text-primary: #333333;
+  --color-text-regular: #666666;
+  --color-text-secondary: #999999;
+  --color-text-placeholder: #cccccc;
+
+  /* 背景色 */
+  --color-bg-page: #f8f8f8;
+  --color-bg-container: #ffffff;
+  --color-bg-overlay: rgba(0, 0, 0, 0.4);
+
+  /* 边框色 */
+  --color-border: #e0e0e0;
+  --color-border-light: #eeeeee;
+
+  /* 阴影 */
+  --shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.02);
+  --shadow-light: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow-base: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --shadow-dark: 0 8px 24px rgba(0, 0, 0, 0.08);
+
+  /* 玻璃态效果 */
+  --glass-bg: rgba(255, 255, 255, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.9);
+
+  /* 圆角 */
+  --radius-small: 6px;
+  --radius-base: 8px;
+  --radius-large: 12px;
+  --radius-xl: 16px;
+
+  /* 间距 */
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+}
+
+/* =========================================================================
+   全局重置
+   ========================================================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: 'Inter', 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--color-text-primary);
+  background-color: var(--color-bg-page);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--color-primary-dark);
+}
+
+/* =========================================================================
+   Element Plus 组件样式覆盖
+   ========================================================================= */
+
+/* 按钮 */
+.el-button {
+  border-radius: var(--radius-small);
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.el-button--primary {
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.el-button--primary:hover {
+  background: var(--color-primary-dark);
+  border-color: var(--color-primary-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-light);
+}
+
+.el-button--large {
+  height: 42px;
+  font-size: 15px;
+  border-radius: var(--radius-base);
+}
+
+/* 输入框 */
+.el-input__wrapper {
+  border-radius: var(--radius-base);
+  border: 1px solid var(--color-border);
+  box-shadow: none;
+  transition: all 0.2s ease;
+}
+
+.el-input__wrapper:hover {
+  border-color: var(--color-primary);
+}
+
+.el-input__wrapper.is-focus {
+  border-color: var(--color-primary);
+  box-shadow: 0 0 0 3px rgba(255, 107, 129, 0.1);
+}
+
+.el-input__inner {
+  height: 42px;
+  font-size: 14px;
+}
+
+/* 标签 */
+.el-tag {
+  border-radius: var(--radius-small);
+  border: none;
+  font-weight: 500;
+}
+
+/* 表格 */
+.el-table {
+  --el-table-border-color: var(--color-border);
+  --el-table-header-bg-color: #fafafa;
+  --el-table-row-hover-bg-color: #fff5f6;
+  border-radius: var(--radius-base);
+  overflow: hidden;
+}
+
+.el-table th.el-table__cell {
+  background: var(--el-table-header-bg-color);
+  font-weight: 600;
+  color: var(--color-text-regular);
+  font-size: 13px;
+}
+
+/* 对话框 */
+.el-dialog {
+  border-radius: var(--radius-large);
+  box-shadow: var(--shadow-dark);
+}
+
+.el-dialog__header {
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--spacing-xl);
+  font-weight: 600;
+}
+
+/* 消息提示 */
+.el-message {
+  border-radius: var(--radius-base);
+  box-shadow: var(--shadow-base);
+  border: none;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* =========================================================================
+   通用工具类
+   ========================================================================= */
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  flex-direction: column;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mb-sm { margin-bottom: 8px; }
+.mb-md { margin-bottom: 12px; }
+.mb-lg { margin-bottom: 16px; }
+.mb-xl { margin-bottom: 20px; }
+.mb-2xl { margin-bottom: 24px; }
+
+.mt-sm { margin-top: 8px; }
+.mt-md { margin-top: 12px; }
+.mt-lg { margin-top: 16px; }
+.mt-xl { margin-top: 20px; }
+
+.p-sm { padding: 8px; }
+.p-md { padding: 12px; }
+.p-lg { padding: 16px; }
+.p-xl { padding: 20px; }
+
+/* 通用卡片类 - 玻璃态效果 */
+.card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: var(--radius-large);
+  box-shadow: var(--shadow-light);
+  border: 1px solid var(--glass-border);
+}
+
+/* 过渡动画 */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}

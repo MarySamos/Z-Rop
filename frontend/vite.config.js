@@ -1,0 +1,22 @@
+import { defineConfig } from 'vite'
+import vue from '@vitejs/plugin-vue'
+import path from 'path'
+
+export default defineConfig({
+    plugins: [vue()],
+    resolve: {
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+            'vue': 'vue/dist/vue.esm-bundler.js'
+        }
+    },
+    server: {
+        host: '0.0.0.0', // 允许外部访问
+        proxy: {
+            '/api': {
+                target: 'http://127.0.0.1:8002',
+                changeOrigin: true
+            }
+        }
+    }
+})

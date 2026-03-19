@@ -1,6 +1,6 @@
 """路由相关数据结构"""
 from dataclasses import dataclass, field
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 from app.graphs.enums import RouteType, FollowupType
 
 
@@ -25,3 +25,15 @@ class RouteDecision:
     def is_followup(self) -> bool:
         """是否是追问"""
         return self.route_type == RouteType.FOLLOWUP
+
+
+@dataclass
+class FollowupAction:
+    """追问动作"""
+    type: str  # EXPLAIN, DETAIL, DRILLDOWN, COMPARE, TREND, NEW_QUERY
+    data: Optional[List[Dict]] = None
+    context: Optional[str] = None
+    dimension: Optional[str] = None  # 下钻维度
+    reason: str = ""
+    last_query: Optional[str] = None  # 上一次查询
+    last_sql: Optional[str] = None   # 上一次 SQL

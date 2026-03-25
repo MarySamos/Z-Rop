@@ -97,3 +97,7 @@ backend/winutils/
 
 # Claude settings
 .claude/settings.local.json
+
+# 工作文档目录
+write/
+docs/

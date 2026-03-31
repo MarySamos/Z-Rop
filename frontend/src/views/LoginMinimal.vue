@@ -1,7 +1,13 @@
 <template>
-  <div class="login-page">
-    <!-- 纯净背景层 -->
-    <div class="background-glass"></div>
+  <div class="login-page" :class="{ 'is-dark': isDarkTheme }">
+    <!-- 新版 sunlit 背景层 -->
+    <SunlitBackground :isDark="isDarkTheme" />
+
+    <!-- 主题切换按钮 -->
+    <button class="theme-toggle-btn animate-in" @click="isDarkTheme = !isDarkTheme" title="切换昼夜主题">
+      <span class="icon" v-if="isDarkTheme">☀️</span>
+      <span class="icon" v-else>🌙</span>
+    </button>
 
     <!-- 左侧：品牌区域 -->
     <div class="brand-section">
@@ -94,6 +100,9 @@
 import { ref, reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '../api'
+import SunlitBackground from '@/components/SunlitBackground.vue'
+
+const isDarkTheme = ref(false)
 
 const router = useRouter()
 
@@ -151,17 +160,9 @@ const handleLogin = async () => {
 .login-page {
   min-height: 100vh;
   display: flex;
-  background: var(--color-bg-page);
+  background: transparent;
   position: relative;
   overflow: hidden;
-}
-
-.background-glass {
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at 15% 50%, rgba(0, 113, 227, 0.04), transparent 40%),
-              radial-gradient(circle at 85% 30%, rgba(0, 113, 227, 0.03), transparent 40%);
-  pointer-events: none;
 }
 
 /* ============================================================
@@ -196,6 +197,7 @@ const handleLogin = async () => {
   color: var(--color-text-primary);
   margin-bottom: 16px;
   line-height: 1.1;
+  text-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .brand-tagline {
@@ -236,9 +238,8 @@ const handleLogin = async () => {
   align-items: center;
   justify-content: center;
   padding: 60px;
-  background: var(--color-bg-container);
+  background: transparent;
   border-left: 1px solid var(--color-border-light);
-  box-shadow: -20px 0 40px rgba(0, 0, 0, 0.02);
   position: relative;
   z-index: 1;
 }
@@ -286,8 +287,13 @@ const handleLogin = async () => {
 
 .form-label {
   font-size: 14px;
-  font-weight: 600;
-  color: var(--color-text-regular);
+  font-weight: 700;
+  color: var(--color-text-primary);
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.is-dark .form-label {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .form-input {
@@ -300,10 +306,16 @@ const handleLogin = async () => {
   border: 1px solid transparent;
   border-radius: var(--radius-base);
   transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .form-input::placeholder {
-  color: var(--color-text-placeholder);
+  color: var(--color-text-regular);
+  opacity: 0.8;
+}
+
+.is-dark .form-input::placeholder {
+  color: rgba(255, 255, 255, 0.6);
 }
 
 .form-input:focus {
@@ -382,13 +394,19 @@ const handleLogin = async () => {
 
 .register-link {
   font-size: 15px;
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+.is-dark .register-link {
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 .register-link .link {
   color: var(--color-primary);
-  font-weight: 600;
-  text-decoration: none;
+  font-weight: 800;
+  text-decoration: underline;
   transition: opacity 0.2s ease;
   margin-left: 4px;
 }
@@ -434,6 +452,71 @@ const handleLogin = async () => {
 /* ============================================================
    响应式
    ============================================================ */
+
+/* ============================================================
+   昼夜主题适配与切换按钮
+   ============================================================ */
+
+.theme-toggle-btn {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border-light);
+  background: var(--color-bg-container);
+  color: var(--color-text-primary);
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 100;
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.05);
+  backdrop-filter: blur(8px);
+}
+
+.theme-toggle-btn:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+.login-page.is-dark {
+  --color-bg-page: transparent;
+  --color-bg-container: transparent;
+  --color-text-primary: #ffffff;
+  --color-text-regular: #f0f0f0;
+  --color-text-secondary: #d0d0d0;
+  --color-border-light: rgba(255, 255, 255, 0.15);
+}
+
+.login-page:not(.is-dark) {
+  --color-bg-page: transparent;
+  --color-bg-container: transparent;
+  --color-text-primary: #1a1a1a;
+  --color-text-regular: #4a4a4a;
+  --color-border-light: rgba(0, 0, 0, 0.15);
+}
+
+.login-page.is-dark .form-input {
+  background: rgba(0, 0, 0, 0.3);
+  color: #fff;
+}
+
+.login-page.is-dark .form-input:focus {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+.login-page.is-dark .btn-submit {
+  background: #ffffff;
+  color: #000000;
+}
+
+.login-page.is-dark .btn-submit:hover:not(:disabled) {
+  background: #e0e0e0;
+}
 
 @media (max-width: 968px) {
   .login-page {

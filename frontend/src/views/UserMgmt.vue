@@ -3,56 +3,45 @@
     <!-- 页面头部 -->
     <header class="page-header">
       <div>
-        <p class="page-breadcrumb">系统管理 / 用户</p>
+        <p class="page-breadcrumb">系统管理 / 用户权限</p>
         <h1 class="page-title">用户管理</h1>
-        <p class="page-subtitle">管理系统用户和权限</p>
+        <p class="page-subtitle">配置系统访问级别与成员权限</p>
       </div>
       <div class="header-actions">
-        <button class="btn-minimal" @click="loadUsers" :disabled="loading">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M1 8a7 7 0 1 1 14 0A7 7 0 0 1 1 8z" />
-            <path d="M8 4v4l3 3" />
-          </svg>
-          刷新
+        <button class="btn-refresh" @click="loadUsers" :disabled="loading">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M12 4V1L8 5l4 4V6c3.31 0 6 2.69 6 6 0 1.01-.25 1.97-.7 2.8l1.46 1.46C19.54 15.03 20 13.57 20 12c0-4.42-3.58-8-8-8zm0 14c-3.31 0-6-2.69-6-6 0-1.01.25-1.97.7-2.8L5.24 7.74C4.46 8.97 4 10.43 4 12c0 4.42 3.58 8 8 8v3l4-4-4-4v3z" fill="currentColor"/></svg>
+          同步列表
         </button>
       </div>
     </header>
 
     <!-- 统计卡片 -->
-    <section class="stats-row">
-      <div class="stat-card-mini animate-in">
-        <span class="stat-label">总用户数</span>
-        <span class="stat-value">{{ stats.total }}</span>
-      </div>
-      <div class="stat-card-mini animate-in">
-        <span class="stat-label">活跃用户</span>
-        <span class="stat-value">{{ stats.active }}</span>
-      </div>
-      <div class="stat-card-mini animate-in">
-        <span class="stat-label">管理员</span>
-        <span class="stat-value">{{ stats.admins }}</span>
-      </div>
-      <div class="stat-card-mini animate-in">
-        <span class="stat-label">本周新增</span>
-        <span class="stat-value">{{ stats.newThisWeek }}</span>
+    <section class="stats-grid">
+      <div v-for="(stat, i) in statItems" :key="i" class="stat-card animate-in" :style="{ animationDelay: `${i * 0.1}s` }">
+        <span class="stat-label">{{ stat.label }}</span>
+        <span class="stat-value">{{ stat.value }}</span>
       </div>
     </section>
 
     <!-- 用户表格 -->
-    <section class="table-section">
-      <div class="table-card">
-        <el-table :data="users" v-loading="loading" class="minimal-table">
-          <el-table-column prop="id" label="ID" width="60" align="center" />
-          <el-table-column prop="employee_id" label="工号" width="140" />
-          <el-table-column prop="name" label="姓名" width="140" />
-          <el-table-column prop="department" label="部门">
+    <section class="table-section animate-in">
+      <div class="table-container">
+        <el-table :data="users" v-loading="loading" class="warm-table">
+          <el-table-column prop="id" label="ID" width="70" align="center" />
+          <el-table-column prop="employee_id" label="工号" width="140">
             <template #default="{ row }">
-              <span class="department-tag">{{ row.department || '-' }}</span>
+              <span class="id-text">{{ row.employee_id }}</span>
             </template>
           </el-table-column>
-          <el-table-column prop="role" label="角色" width="120">
+          <el-table-column prop="name" label="姓名" width="150" />
+          <el-table-column prop="department" label="部门">
             <template #default="{ row }">
-              <span :class="['role-badge', `role-${row.role}`]">
+              <span class="dept-tag">{{ row.department || '未分配' }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="role" label="角色" width="130">
+            <template #default="{ row }">
+              <span :class="['role-chip', `role-${row.role || 'user'}`]">
                 {{ getRoleName(row.role) }}
               </span>
             </template>
@@ -62,21 +51,20 @@
               <el-switch
                 v-model="row.is_active"
                 @change="toggleStatus(row)"
-                :active-color="getCssVar('--accent')"
+                active-color="#B08D6F"
+                inactive-color="#EFEBE5"
               />
             </template>
           </el-table-column>
-          <el-table-column prop="created_at" label="创建时间" width="180">
+          <el-table-column prop="created_at" label="加入时间" width="180">
             <template #default="{ row }">
               {{ formatDate(row.created_at) }}
             </template>
           </el-table-column>
-          <el-table-column label="操作" width="120" align="center" fixed="right">
+          <el-table-column label="管理" width="100" align="center" fixed="right">
             <template #default="{ row }">
-              <button class="action-btn" @click="deleteUser(row)">
-                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
-                  <path d="M2 5h12M5 5V3a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M6 9v4M10 9v4M3 5h10v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5z" />
-                </svg>
+              <button class="btn-delete" @click="deleteUser(row)" title="下线用户">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6" /></svg>
               </button>
             </template>
           </el-table-column>
@@ -94,22 +82,27 @@ import api from '../api'
 const loading = ref(false)
 const users = ref([])
 
-const stats = computed(() => {
+const statItems = computed(() => {
   const total = users.value.length
   const active = users.value.filter(u => u.is_active).length
   const admins = users.value.filter(u => u.role === 'admin').length
   const oneWeekAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
   const newThisWeek = users.value.filter(u => new Date(u.created_at) > oneWeekAgo).length
-  return { total, active, admins, newThisWeek }
+  return [
+    { label: '用户总数', value: total },
+    { label: '活跃成员', value: active },
+    { label: '高级管理', value: admins },
+    { label: '近期新增', value: newThisWeek }
+  ]
 })
 
 const loadUsers = async () => {
   loading.value = true
   try {
     const res = await api.get('/api/v1/admin/users')
-    users.value = res.data.users || res.data || []
+    users.value = Array.isArray(res.data.users) ? res.data.users : (Array.isArray(res.data) ? res.data : [])
   } catch (e) {
-    ElMessage.error('加载失败')
+    ElMessage.error('无法同步用户列表')
   } finally {
     loading.value = false
   }
@@ -118,9 +111,9 @@ const loadUsers = async () => {
 const toggleStatus = async (user) => {
   try {
     await api.put(`/api/v1/admin/users/${user.id}/status`, { is_active: user.is_active })
-    ElMessage.success(user.is_active ? '已启用' : '已禁用')
+    ElMessage({ message: user.is_active ? '用户已接入' : '用户已脱离', type: 'success', customClass: 'warm-msg' })
   } catch (e) {
-    ElMessage.error('操作失败')
+    ElMessage.error('操作中断，请重试')
     user.is_active = !user.is_active
   }
 }
@@ -128,237 +121,72 @@ const toggleStatus = async (user) => {
 const deleteUser = async (user) => {
   try {
     await ElMessageBox.confirm(
-      `确定要删除用户 "${user.name}" 吗？此操作不可撤销。`,
-      '确认删除',
-      {
-        confirmButtonText: '删除',
-        cancelButtonText: '取消',
-        type: 'warning',
-        confirmButtonClass: 'el-button--danger'
-      }
+      `确定要将用户 "${user.name}" 置为非活动状态并清除记录吗？`,
+      '权限变更确认',
+      { confirmButtonText: '确定核销', cancelButtonText: '取消', type: 'warning' }
     )
     await api.delete(`/api/v1/admin/users/${user.id}`)
-    ElMessage.success('删除成功')
+    ElMessage.success('操作成功完成')
     loadUsers()
   } catch (e) {
-    if (e !== 'cancel') {
-      ElMessage.error('删除失败')
-    }
+    if (e !== 'cancel') ElMessage.error('权限核销失败')
   }
 }
 
 const getRoleName = (role) => {
-  const names = {
-    admin: '管理员',
-    analyst: '分析师',
-    user: '用户'
-  }
+  const names = { admin: '首席管理', analyst: '高级分析', user: '标准成员' }
   return names[role] || role
 }
 
 const formatDate = (dateStr) => {
   if (!dateStr) return '-'
   const date = new Date(dateStr)
-  return date.toLocaleString('zh-CN', {
-    year: 'numeric',
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit'
-  })
+  return date.toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })
 }
 
-const getCssVar = (name) => {
-  return getComputedStyle(document.documentElement).getPropertyValue(name).trim()
-}
-
-onMounted(() => {
-  loadUsers()
-})
+onMounted(() => loadUsers())
 </script>
 
 <style scoped>
-.page {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-  padding-bottom: 40px;
-}
+.page { padding: 40px; background: #FDFBF7; min-height: 100vh; color: #2C2420; }
 
-.page-breadcrumb {
-  font-size: 12px;
-  color: var(--accent);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  margin-bottom: 8px;
-}
+.page-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 48px; }
+.page-breadcrumb { font-size: 11px; font-weight: 700; color: #B08D6F; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.page-title { font-size: 2.5rem; font-weight: 700; font-family: 'Playfair Display', serif; margin: 0; }
+.page-subtitle { font-size: 14px; color: #8C827D; margin-top: 4px; }
 
-.page-title {
-  font-size: 1.75rem;
-  font-weight: 400;
-  font-family: 'Playfair Display', Georgia, serif;
-  color: var(--text-primary);
-  margin: 0 0 4px 0;
-}
+.btn-refresh { padding: 10px 24px; background: #B08D6F; color: #fff; border: none; border-radius: 24px; font-weight: 600; font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: all 0.2s; box-shadow: 0 4px 12px rgba(176,141,111,0.2); }
+.btn-refresh:hover { background: #96765A; transform: translateY(-1px); }
 
-.page-subtitle {
-  font-size: 0.875rem;
-  color: var(--text-tertiary);
-  margin: 0;
-}
+/* 统计区域 */
+.stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; margin-bottom: 48px; }
+.stat-card { background: #fff; border: 1px solid #EFEBE5; border-radius: 20px; padding: 28px; text-align: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+.stat-card:hover { transform: translateY(-4px); box-shadow: 0 12px 30px rgba(44, 36, 32, 0.05); border-color: #B08D6F; }
 
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.header-actions {
-  display: flex;
-  gap: 12px;
-}
-
-/* 统计卡片 */
-.stats-row {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 16px;
-}
-
-.stat-card-mini {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  padding: 20px;
-  border: 1px solid rgba(196, 164, 132, 0.08);
-  text-align: center;
-}
-
-.stat-label {
-  display: block;
-  font-size: 12px;
-  color: var(--text-tertiary);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  margin-bottom: 8px;
-}
-
-.stat-value {
-  display: block;
-  font-size: 1.75rem;
-  font-weight: 500;
-  font-family: 'Playfair Display', Georgia, serif;
-  color: var(--text-primary);
-}
+.stat-label { display: block; font-size: 11px; font-weight: 700; color: #8C827D; text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 12px; }
+.stat-value { font-size: 2rem; font-weight: 700; font-family: 'Playfair Display', serif; color: #2C2420; }
 
 /* 表格区域 */
-.table-section {
-  background: var(--bg-card);
-  border-radius: var(--radius-lg);
-  padding: 24px;
-  border: 1px solid rgba(196, 164, 132, 0.08);
-}
+.table-section { background: #fff; border-radius: 24px; padding: 32px; border: 1px solid #EFEBE5; box-shadow: 0 2px 12px rgba(44, 36, 32, 0.02); }
+.table-container { width: 100%; }
 
-.table-card {
-  width: 100%;
-}
+.id-text { font-family: monospace; color: #B08D6F; font-weight: 600; }
+.dept-tag { padding: 4px 12px; background: #F5F2ED; border-radius: 12px; font-size: 13px; color: #5C524D; font-weight: 500; }
 
-.department-tag {
-  display: inline-block;
-  padding: 4px 10px;
-  background: var(--bg-secondary);
-  border-radius: 12px;
-  font-size: 13px;
-  color: var(--text-secondary);
-}
+.role-chip { display: inline-block; padding: 4px 14px; border-radius: 14px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; }
+.role-admin { background: #FFF4F4; color: #E57373; border: 1px solid #FFEBEB; }
+.role-analyst { background: #FFF9F2; color: #B08D6F; border: 1px solid #FDF3E9; }
+.role-user { background: #F5F2ED; color: #8C827D; }
 
-.role-badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
-  font-weight: 500;
-}
+.btn-delete { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; background: transparent; border: none; color: #BDB1A8; border-radius: 50%; cursor: pointer; transition: all 0.2s; }
+.btn-delete:hover { color: #E57373; background: #FFF4F4; }
 
-.role-admin {
-  background: rgba(196, 120, 106, 0.15);
-  color: var(--error);
-}
+/* Element Plus 覆盖 */
+:deep(.warm-table) { background: transparent; --el-table-header-bg-color: #FDFBF7; --el-table-row-hover-bg-color: #FDFBF7; }
+:deep(.warm-table th.el-table__cell) { padding: 16px 0; color: #8C827D; border-bottom: 2px solid #F5F2ED; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+:deep(.warm-table td.el-table__cell) { padding: 18px 0; border-bottom: 1px solid #F5F2ED; color: #2C2420; font-size: 14px; }
+:deep(.warm-table .el-table__inner-wrapper::before) { display: none; }
 
-.role-analyst {
-  background: rgba(196, 164, 132, 0.15);
-  color: var(--accent);
-}
-
-.role-user {
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-}
-
-.action-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 8px;
-  background: transparent;
-  border: none;
-  color: var(--text-tertiary);
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  transition: all var(--transition-fast);
-}
-
-.action-btn:hover {
-  color: var(--error);
-  background: rgba(196, 120, 106, 0.1);
-}
-
-/* Element Plus 表格样式覆盖 */
-:deep(.minimal-table) {
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text-primary);
-}
-
-:deep(.minimal-table .el-table__header-wrapper) {
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-}
-
-:deep(.minimal-table th.el-table__cell) {
-  background: var(--bg-secondary);
-  color: var(--text-secondary);
-  font-weight: 500;
-  font-size: 13px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-bottom: 1px solid var(--bg-secondary);
-}
-
-:deep(.minimal-table td.el-table__cell) {
-  border-bottom: 1px solid var(--bg-secondary);
-}
-
-:deep(.minimal-table tr:hover > td) {
-  background: var(--bg-secondary) !important;
-}
-
-:deep(.minimal-table .el-table__empty-block) {
-  background: var(--bg-card);
-}
-
-/* 响应式 */
-@media (max-width: 1024px) {
-  .stats-row {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 640px) {
-  .stats-row {
-    grid-template-columns: 1fr;
-  }
-
-  .page-header {
-    flex-direction: column;
-    gap: 16px;
-  }
-}
+@media (max-width: 1200px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 768px) { .stats-grid { grid-template-columns: 1fr; } .page-header { flex-direction: column; gap: 24px; } }
 </style>

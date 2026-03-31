@@ -179,7 +179,7 @@ def test_context_aware_generation():
 def main():
     """运行所有测试"""
     print("\n")
-    print("🤖 BankAgent 智能体增强功能测试")
+    print("🤖 Z-Rop 智能体增强功能测试")
     print("=" * 60)
 
     tests = [

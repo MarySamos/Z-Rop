@@ -90,7 +90,7 @@ def query_rewrite_node(state: AgentState) -> dict:
 
 
 def create_bank_agent_graph(use_checkpoint: bool = True):
-    """创建 BankAgent 智能体工作流图（完整增强版）.
+    """创建 Z-Rop 智能体工作流图（完整增强版）.
 
     工作流说明：
     1. query_rewrite -> 查询重写（优化模糊查询）

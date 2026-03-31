@@ -18,7 +18,7 @@ from app.graphs.enums import Intent
 
 # ========== Agent 状态定义 ==========
 class AgentState(MessagesState):
-    """BankAgent 工作流状态（完整增强版）.
+    """Z-Rop 工作流状态（完整增强版）.
 
     继承自 MessagesState，支持消息历史管理
 

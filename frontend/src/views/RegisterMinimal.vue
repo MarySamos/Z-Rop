@@ -13,7 +13,7 @@
             <circle cx="20" cy="20" r="6" fill="currentColor" opacity="0.8"/>
           </svg>
         </div>
-        <h1 class="brand-title">BankAgent</h1>
+        <h1 class="brand-title">Z-Rop</h1>
         <p class="brand-tagline">开启智能数据分析之旅</p>
 
         <div class="brand-features">
@@ -43,7 +43,7 @@
       <div class="form-container animate-in">
         <div class="form-header">
           <p class="form-greeting">创建账户</p>
-          <h2 class="form-title">加入 BankAgent</h2>
+          <h2 class="form-title">加入 Z-Rop</h2>
           <p class="form-subtitle">请填写以下信息完成注册</p>
         </div>
 

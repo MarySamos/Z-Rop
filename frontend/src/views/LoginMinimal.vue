@@ -19,7 +19,7 @@
             <circle cx="20" cy="20" r="6" fill="currentColor" opacity="0.8"/>
           </svg>
         </div>
-        <h1 class="brand-title">BankAgent</h1>
+        <h1 class="brand-title">Z-Rop</h1>
         <p class="brand-tagline">智能银行数据分析平台</p>
 
         <div class="brand-features">

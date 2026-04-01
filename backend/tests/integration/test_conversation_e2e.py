@@ -21,7 +21,7 @@ async def test_full_conversation_flow():
     # 验证问候响应包含友好的回复
     assert any('"route_type": "chat"' in r for r in responses), "应该路由到闲聊"
     assert any("answer" in r for r in responses), "应该返回回答"
-    assert any(("你好" in r or "嗨" in r or "BankAgent" in r) for r in responses), "应该包含问候语"
+    assert any(("你好" in r or "嗨" in r or "Z-Rop" in r or "Z-Rop" in r) for r in responses), "应该包含问候语"
 
     # 2. 查询（注意：如果没有 langgraph，会返回错误）
     responses = []
